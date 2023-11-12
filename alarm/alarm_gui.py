@@ -3,35 +3,35 @@ import pyglet
 import os
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
+import shutil
 import time
 
 root = Tk()
 root.title("Alarm clock")
-root.geometry("800x600")
+root.geometry("500x250")
 
-
-
-
-
-#def dwnld():
-
-
-
-label_download = Label(text="Download songs:")
-label_download.grid(row=0, column=0)
-btn_dwnld = Button(root, text="Select and download", bg="green", fg="white")
-btn_dwnld.grid(row=0, column=1, columnspan=1, pady=5, sticky=NSEW)
 
 
 mus_dir = "songs"
-
 songs = os.listdir(mus_dir)
-
-
 label_songs = Label(text="Select song:")
 label_songs.grid(row=1, column=0)
 combobox = ttk.Combobox(values=songs)
 combobox.grid(row=2, column=0)
+
+def dwnld():
+    files = filedialog.askopenfilenames()
+    for file in files:
+        shutil.copy(file, mus_dir)
+    new_songs = os.listdir(mus_dir)
+    combobox['values'] = new_songs
+    combobox.set(new_songs[0])
+
+label_download = Label(text="Download songs:")
+label_download.grid(row=0, column=0)
+btn_dwnld = Button(root, text="Select and download", bg="green", fg="white", command=dwnld)
+btn_dwnld.grid(row=0, column=1, columnspan=1, pady=5, sticky=NSEW)
 
 hours = StringVar()
 minutes = StringVar()
@@ -47,9 +47,6 @@ inp_min.grid(row=4, column=1)
 label_sec = Label(text="Set seconds:").grid(row=3, column = 2)
 inp_sec = Entry(root, textvariable=seconds)
 inp_sec.grid(row=4, column=2)
-
-
-
 
 def start_play():
     while True:
